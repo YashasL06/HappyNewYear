@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Happy New Year – Chaos Edition</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1a1a40 0, #050510 45%, #000000 100%);
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 16px 60px;
+      overflow: hidden;
+    }
+
+    .title {
+      font-size: 3rem;
+      text-align: center;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow:
+        0 0 5px #fff,
+        0 0 10px #f72585,
+        0 0 20px #f72585,
+        0 0 40px #f72585;
+      animation: glow 1.8s ease-in-out infinite alternate;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #b3b3ff;
+      font-size: 1.1rem;
+    }
+
+    @keyframes glow {
+      0% {
+        text-shadow:
+          0 0 5px #fff,
+          0 0 10px #f72585,
+          0 0 20px #f72585,
+          0 0 40px #f72585;
+      }
+      100% {
+        text-shadow:
+          0 0 10px #fff,
+          0 0 20px #ff9f1c,
+          0 0 40px #ff9f1c,
+          0 0 80px #ff9f1c;
+      }
+    }
+
+    .card {
+      width: 100%;
+      max-width: 720px;
+      background: rgba(7, 7, 20, 0.9);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 24px 20px 28px;
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.7),
+        0 0 30px rgba(120, 119, 198, 0.5);
+      backdrop-filter: blur(14px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(
+        from 180deg,
+        #ff006e,
+        #ffbe0b,
+        #3a86ff,
+        #8338ec,
+        #ff006e
+      );
+      opacity: 0.35;
+      mix-blend-mode: screen;
+      filter: blur(40px);
+      animation: spin 18s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .section {
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      color: #ffbe0b;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title span.icon {
+      font-size: 1.2rem;
+    }
+
+    .section p {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: #e0e0ff;
+      margin-bottom: 4px;
+    }
+
+    .section p.small {
+      font-size: 0.88rem;
+      color: #b0b0d9;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.18);
+      border: 1px solid rgba(96, 165, 250, 0.7);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #bfdbfe;
+      margin-bottom: 10px;
+    }
+
+    .memes {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .meme-line {
+      font-size: 0.95rem;
+      padding: 6px 9px;
+      border-radius: 10px;
+      background: rgba(17, 24, 39, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .meme-tag {
+      font-size: 0.78rem;
+      opacity: 0.8;
+      color: #a5b4fc;
+    }
+
+    .footer {
+      margin-top: 18px;
+      font-size: 0.85rem;
+      color: #9ca3af;
+      text-align: center;
+    }
+
+    .footer span {
+      color: #f97316;
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 2.2rem;
+      }
+      .card {
+        padding: 18px 14px 22px;
+      }
+    }
+
+    .confetti {
+      position: fixed;
+      top: -10px;
+      width: 8px;
+      height: 14px;
+      background: #facc15;
+      opacity: 0.9;
+      border-radius: 2px;
+      animation: fall 6s linear infinite;
+      z-index: 10;
+    }
+
+    .confetti:nth-child(odd) {
+      background: #fb7185;
+    }
+
+    .confetti:nth-child(3n) {
+      background: #38bdf8;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translate3d(0, -10vh, 0) rotateZ(0deg);
+      }
+      100% {
+        transform: translate3d(0, 110vh, 0) rotateZ(360deg);
+      }
+    }
+
+    .meme-img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin: 10px 0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- confetti -->
+  <div class="confetti" style="left:10%; animation-delay:-1s;"></div>
+  <div class="confetti" style="left:25%; animation-delay:-3s;"></div>
+  <div class="confetti" style="left:40%; animation-delay:-2s;"></div>
+  <div class="confetti" style="left:55%; animation-delay:-4s;"></div>
+  <div class="confetti" style="left:70%; animation-delay:-1.5s;"></div>
+  <div class="confetti" style="left:85%; animation-delay:-3.5s;"></div>
+
+  <h1 class="title">Happy New Year 🎉</h1>
+  <p class="subtitle">
+    New year, same chaos. But this time the vibes are front‑end and feelings are full‑stack.
+  </p>
+
+  <div class="card">
+    <!-- RCB section -->
+    <div class="section">
+      <div class="pill">Personal broadcast from the offline dev server</div>
+      <div class="section-title">
+        <span class="icon">🏏</span>
+        RCB FANS COPING STATION
+      </div>
+
+      <img src="images/rcb.jpg"
+           alt="RCB meme"
+           class="meme-img" />
+
+      <div class="memes">
+        <div class="meme-line">
+          - New Year resolution: Believe in two impossible things –
+          <strong>RCB finally winning</strong> and me waking up at 5 AM voluntarily.
+          <div class="meme-tag">#EeSalaCupNamde #Maybe</div>
+        </div>
+        <div class="meme-line">
+          - If RCB can make fans say "this year is ours" every season, then yes,
+          there is hope for all our goals too.
+          <div class="meme-tag">Peak optimism, powered by filter coffee</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stranger Things section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🧇</span>
+        STRANGER THINGS ENERGY
+      </div>
+
+      <img src="images/stranger-things.jpg"
+           alt="Stranger Things"
+           class="meme-img" />
+
+      <p>
+        This year, may your problems stay trapped in the <strong>Upside Down</strong>,
+        your productivity be as strong as Eleven on a good day, and your friend circle
+        as loyal as the Hawkins gang.
+      </p>
+      <p class="small">
+        Also manifesting: no Demogorgons, no Vecna, only good Wi‑Fi, green CI pipelines,
+        and snacks that magically appear when you need them most.
+      </p>
+    </div>
+
+    <!-- Adulting section -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🧾</span>
+        ADULTING PATCH NOTES
+      </div>
+
+      <img src="images/adulting.jpg"
+           alt="Adulting meme"
+           class="meme-img" />
+
+      <div class="memes">
+        <div class="meme-line">
+          - Adulting 1.0: “New year, new me.”  
+            Adulting 2.0: “New year, same me, slightly better exception handling.”
+        </div>
+        <div class="meme-line">
+          - Chores, bills, health, career, family, friends… life is basically
+          a production system with no staging environment.
+        </div>
+        <div class="meme-line">
+          - This year’s patch notes: fewer burnout all‑nighters, more hydration,
+          more walks, and slightly less doomscrolling at 2 AM.
+        </div>
+      </div>
+    </div>
+
+    <!-- Personal image / closing -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🚀</span>
+        SPECIAL WISH JUST FOR YOU
+      </div>
+
+      <img src="images/personal.jpg"
+           alt="Personal New Year image"
+           class="meme-img" />
+
+      <p>
+        Wishing you <strong>green checkmarks</strong> on your goals,
+        fewer bugs in code and in life, more random adventures,
+        and friends who feel like home.
+      </p>
+      <p class="small">
+        If you’re reading this locally, congratulations – you’ve just opened
+        a New Year wish deployed from your very own laptop dev environment.
+      </p>
+    </div>
+
+    <div class="footer">
+      Made with <span>memes, caffeine, and chaos</span> • Running on localhost
+    </div>
+  </div>
+</body>
+</html>
