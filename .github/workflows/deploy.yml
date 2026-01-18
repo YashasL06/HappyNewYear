@@ -1,0 +1,24 @@
+name: Deploy to EC2
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-arn: arn:aws:iam::515421558980:role/GitHubActionsRole
+        aws-region: us-east-1  # Your region
+    - name: Deploy via SSM
+      run: |
+        aws ssm start-session --target i-03a340bbd050279ba \
+          --document-name AWS-StartSSHSession \
+          --parameters '{"portNumber":["22"]}' \
+          --region us-east-1 << 'EOF'
+        sudo cp -r * /var/www/html/
+        sudo systemctl restart httpd
+        exit
+        EOF
