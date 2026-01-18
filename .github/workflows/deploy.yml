@@ -17,8 +17,4 @@ jobs:
     - name: Deploy via SSM
       run: |
         aws ssm start-session --target i-YOUR-ID --document-name AWS-StartSSHSession \
-<<<<<<< HEAD
           --parameters '{"portNumber":["22"]}'
-=======
-          --parameters '{"portNumber":["22"]}'
->>>>>>> 0034495ca7f69185e2c8a51d0f297beef9352f96
