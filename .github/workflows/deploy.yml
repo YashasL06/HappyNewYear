@@ -1,33 +1,33 @@
-name: Deploy to EC2
+- name: Login to ECR
+  env:
+    ECR_REGISTRY: 515421558980.dkr.ecr.us-east-1.amazonaws.com
+  run: |
+    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
 
-on:  # ADD FULL TOP-LEVEL SECTION
-  push:
-    branches: [ main ]  # Triggers on push to main (change if master)
+- name: Build & Push to ECR
+  env:
+    ECR_REGISTRY: 515421558980.dkr.ecr.us-east-1.amazonaws.com
+  run: |
+    docker build -t happy-newyear .
+    docker tag happy-newyear:latest $ECR_REGISTRY/happy-newyear-app:latest
+    docker push $ECR_REGISTRY/happy-newyear-app:latest
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-    - uses: actions/checkout@v4
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-region: us-east-1
-        role-to-assume: arn:aws:iam::515421558980:role/GitHubActionsRole
-        audience: sts.amazonaws.com
-        role-session-name: GitHubActionsSession
-    - name: Test AWS (debug)
-      run: aws sts get-caller-identity  # Confirms role assume
-    - name: Deploy via SSM
-      run: |
-        aws ssm start-session --target i-03a340bbd050279ba \
-          --document-name AWS-StartSSHSession \
-          --parameters '{"portNumber":["22"]}' \
-          --region us-east-1 << 'EOF'
-        sudo cp -r * /var/www/html/
-        sudo systemctl restart httpd
-        exit
-        EOF
+- name: Deploy Docker to EC2
+  env:
+    ECR_REGISTRY: 515421558980.dkr.ecr.us-east-1.amazonaws.com
+  run: |
+    aws ssm start-session --target i-03a340bbd050279ba \
+      --document-name AWS-StartSSHSession \
+      --parameters '{"portNumber":["22"]}' \
+      --region us-east-1 << 'EOF'
+    sudo yum update -y
+    sudo yum install -y docker
+    sudo systemctl start --now docker
+    sudo usermod -aG docker ec2-user
+    aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin $ECR_REGISTRY
+    sudo docker run -d --name newyear-app -p 80:80 $ECR_REGISTRY/happy-newyear-app:latest
+    sudo docker stop httpd-container || true  # Cleanup old
+    sudo systemctl stop httpd  # Stop Apache
+    sudo systemctl disable httpd
+    exit
+    EOF
