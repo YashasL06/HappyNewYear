@@ -38,18 +38,19 @@ jobs:
         docker push $ECR_REGISTRY/happy-newyear-app:latest
     
     - name: Deploy to EC2
-      env:
-        ECR_REGISTRY: 515421558980.dkr.ecr.us-east-1.amazonaws.com
-      run: |
-        aws ssm start-session --target i-YOUR-INSTANCE-ID \
-          --document-name AWS-StartSSHSession \
-          --parameters '{"portNumber":["22"]}' \
-          --region us-east-1 << 'EOF'
-        sudo yum install -y docker
-        sudo systemctl enable --now docker
-        aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin $ECR_REGISTRY
-        sudo docker rm -f newyear-app || true
-        sudo docker run -d --name newyear-app -p 80:80 $ECR_REGISTRY/happy-newyear-app:latest
-        sudo systemctl stop httpd || true
-        exit
-        EOF
+  env:
+    ECR_REGISTRY: 515421558980.dkr.ecr.us-east-1.amazonaws.com
+  run: |
+    aws ssm start-session --target i-03a340bbd050279ba \
+      --document-name AWS-StartSSHSession \
+      --parameters '{"portNumber":["22"]}' \
+      --region us-east-1 << 'EOF'
+    sudo yum install -y docker
+    sudo systemctl enable --now docker
+    aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin $ECR_REGISTRY
+    sudo docker rm -f newyear-app || true
+    sudo docker run -d --name newyear-app -p 80:80 $ECR_REGISTRY/happy-newyear-app:latest
+    sudo systemctl stop httpd || true
+    exit
+    EOF
+
