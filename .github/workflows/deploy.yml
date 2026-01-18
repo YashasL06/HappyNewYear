@@ -23,7 +23,7 @@ jobs:
       run: aws sts get-caller-identity  # Confirms role assume
     - name: Deploy via SSM
       run: |
-        aws ssm start-session --target i-YOUR-INSTANCE-ID \
+        aws ssm start-session --target i-03a340bbd050279ba \
           --document-name AWS-StartSSHSession \
           --parameters '{"portNumber":["22"]}' \
           --region us-east-1 << 'EOF'
