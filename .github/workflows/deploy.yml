@@ -5,6 +5,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:  # ADD THIS
+      id-token: write
+      contents: read
     steps:
     - uses: actions/checkout@v4
     - name: Configure AWS credentials
